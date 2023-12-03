@@ -1,5 +1,6 @@
 import re
 import math
+from itertools import chain
 from typing import Generator
 
 
@@ -19,7 +20,7 @@ def collect_matches(matches: list[re.Match], num: re.Match, line: str, check_pos
         matches.append(num)
 
 
-def find_parts(text: list[str]) -> Generator:
+def iter_parts(text: list[str], yield_values: bool = False) -> Generator:
     exp = re.compile(r"\d+")
     for i, line in enumerate(text):
         parts = []
@@ -29,11 +30,14 @@ def find_parts(text: list[str]) -> Generator:
                 collect_matches(parts, num, text[i - 1], True)
             if i < len(text) - 1:
                 collect_matches(parts, num, text[i + 1], True)
-        yield parts
+        if yield_values:
+            yield [int(p.group()) for p in parts]
+        else:
+            yield parts
 
 
 def part_1(text: list[str]) -> int:
-    return sum(int(num.group()) for lines in find_parts(text) for num in lines)
+    return sum(chain.from_iterable(iter_parts(text, yield_values=True)))
 
 
 def check_positions(part: re.Match, gear: re.Match) -> bool:
@@ -50,9 +54,9 @@ def collect_parts(adj_numbers: list[int], gear: re.Match, parts: list[re.Match])
 
 
 def find_adj_numbers(text: list[str]) -> Generator:
-    parts = list(find_parts(text))
-    gears_list = [list(re.finditer(r"\*", line)) for line in text]
-    for i, gears in enumerate(gears_list):
+    parts = list(iter_parts(text))
+    gears = [list(re.finditer(r"\*", line)) for line in text]
+    for i, gears in enumerate(gears):
         for gear in gears:
             adj_numbers = []
             collect_parts(adj_numbers, gear, parts[i])
