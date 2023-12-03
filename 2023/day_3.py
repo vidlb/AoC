@@ -4,22 +4,20 @@ from itertools import chain
 from typing import Generator
 
 
-def check_char(char: str) -> bool:
-    if char.isdigit() or char == ".":
-        return False
-    return True
+def check_match(number: re.Match, line: str, check_pos: bool) -> bool:
+    def check_char(char: str) -> bool:
+        if char.isdigit() or char == ".":
+            return False
+        return True
 
-
-def collect_matches(num: re.Match, line: str, check_pos: bool):
-    matches = []
-    start, end = num.span()
+    start, end = number.span()
     if check_pos and any(check_char(c) for c in line[start:end]):
-        matches.append(num)
-    elif start > 0 and check_char(line[start - 1]):
-        matches.append(num)
-    elif end < len(line) - 1 and check_char(line[end]):
-        matches.append(num)
-    return matches
+        return True
+    if start > 0 and check_char(line[start - 1]):
+        return True
+    if end < len(line) - 1 and check_char(line[end]):
+        return True
+    return False
 
 
 def iter_parts(text: list[str], yield_values: bool = False) -> Generator:
@@ -27,14 +25,15 @@ def iter_parts(text: list[str], yield_values: bool = False) -> Generator:
     for i, line in enumerate(text):
         parts = []
         for num in exp.finditer(line):
-            parts.extend(collect_matches(num, line, False))
-            if i > 0:
-                parts.extend(collect_matches(num, text[i - 1], True))
-            if i < len(text) - 1:
-                parts.extend(collect_matches(num, text[i + 1], True))
+            if check_match(num, line, False):
+                parts.append(num)
+            elif i > 0 and check_match(num, text[i - 1], True):
+                parts.append(num)
+            elif i < len(text) - 1 and check_match(num, text[i + 1], True):
+                parts.append(num)
         if yield_values:
             yield [int(p.group()) for p in parts]
-        else:  # yield matches
+        else:  # yield matches, for part 2
             yield parts
 
 
@@ -42,7 +41,7 @@ def part_1(text: list[str]) -> int:
     return sum(chain.from_iterable(iter_parts(text, yield_values=True)))
 
 
-def collect_parts(gear: re.Match, parts: list[re.Match]):
+def collect_parts(gear: re.Match, parts: list[re.Match]) -> list[int]:
     adj_numbers = []
     for part in parts:
         pos_range = range(part.start(), part.end() + 1)
@@ -51,7 +50,7 @@ def collect_parts(gear: re.Match, parts: list[re.Match]):
     return adj_numbers
 
 
-def part_2(text: list[str]) -> Generator:
+def part_2(text: list[str]) -> int:
     parts = list(iter_parts(text))
     gears = [list(re.finditer(r"\*", line)) for line in text]
     tot = 0
