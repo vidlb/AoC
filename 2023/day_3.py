@@ -53,7 +53,7 @@ def collect_parts(adj_numbers: list[int], gear: re.Match, parts: list[re.Match])
             adj_numbers.append(int(part.group()))
 
 
-def find_adj_numbers(text: list[str]) -> Generator:
+def iter_gear_ratios(text: list[str]) -> Generator:
     parts = list(iter_parts(text))
     gears = [list(re.finditer(r"\*", line)) for line in text]
     for i, gears in enumerate(gears):
@@ -65,11 +65,11 @@ def find_adj_numbers(text: list[str]) -> Generator:
             if i < len(text) - 1:
                 collect_parts(adj_numbers, gear, parts[i + 1])
             if len(adj_numbers) == 2:
-                yield adj_numbers
+                yield math.prod(adj_numbers)
 
 
 def part_2(text: list[str]) -> int:
-    return sum(math.prod(parts) for parts in find_adj_numbers(text))
+    return sum(iter_gear_ratios(text))
 
 
 if __name__ == "__main__":
