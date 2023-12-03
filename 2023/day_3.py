@@ -32,7 +32,7 @@ def iter_parts(text: list[str], yield_values: bool = False) -> Generator:
                 collect_matches(parts, num, text[i + 1], True)
         if yield_values:
             yield [int(p.group()) for p in parts]
-        else:
+        else:  # yield matches
             yield parts
 
 
@@ -53,9 +53,10 @@ def collect_parts(adj_numbers: list[int], gear: re.Match, parts: list[re.Match])
             adj_numbers.append(int(part.group()))
 
 
-def iter_gear_ratios(text: list[str]) -> Generator:
+def part_2(text: list[str]) -> Generator:
     parts = list(iter_parts(text))
     gears = [list(re.finditer(r"\*", line)) for line in text]
+    tot = 0
     for i, gears in enumerate(gears):
         for gear in gears:
             adj_numbers = []
@@ -65,11 +66,8 @@ def iter_gear_ratios(text: list[str]) -> Generator:
             if i < len(text) - 1:
                 collect_parts(adj_numbers, gear, parts[i + 1])
             if len(adj_numbers) == 2:
-                yield math.prod(adj_numbers)
-
-
-def part_2(text: list[str]) -> int:
-    return sum(iter_gear_ratios(text))
+                tot += math.prod(adj_numbers)
+    return tot
 
 
 if __name__ == "__main__":

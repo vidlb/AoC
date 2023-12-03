@@ -1,5 +1,4 @@
 import math
-from typing import Generator
 
 CUBES_MAX = {"red": 12, "green": 13, "blue": 14}
 
@@ -26,14 +25,17 @@ def check_draw(draw: list[str]) -> bool:
     return True
 
 
-def part_1(text: list[str]) -> Generator:
+def part_1(text: list[str]) -> int:
+    tot = 0
     for string in text:
         game_id, draws = parse_game(string)
         if all(map(check_draw, draws)):
-            yield game_id
+            tot += game_id
+    return tot
 
 
-def part_2(text: list[str]) -> Generator:
+def part_2(text: list[str]) -> int:
+    tot = 0
     for string in text:
         _, draws = parse_game(string)
         counters = [color_count(d) for d in draws]
@@ -42,11 +44,12 @@ def part_2(text: list[str]) -> Generator:
             for color, count in counter.items():
                 if count > used_cubes[color]:
                     used_cubes[color] = count
-        yield math.prod(used_cubes.values())
+        tot += math.prod(used_cubes.values())
+    return tot
 
 
 if __name__ == "__main__":
     with open("data_2.txt", encoding="utf-8") as io:
         data = io.read().splitlines()
-    print(f"Part 1 answer is {sum(part_1(data))}")
-    print(f"Part 2 answer is {sum(part_2(data))}")
+    print(f"Part 1 answer is {part_1(data)}")
+    print(f"Part 2 answer is {part_2(data)}")
