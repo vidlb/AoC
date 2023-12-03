@@ -4,13 +4,14 @@ from itertools import chain
 from typing import Generator
 
 
-def check_match(number: re.Match, line: str, check_pos: bool) -> bool:
+def check_match(number: re.Match, line: str, span_check: bool) -> bool:
     expr = re.compile(r"\d|\.")
+
     def check_char(char: str) -> bool:
         return expr.match(char)
 
     start, end = number.span()
-    if check_pos and any(check_char(c) for c in line[start:end]):
+    if span_check and any(check_char(c) for c in line[start:end]):
         return True
     if start > 0 and check_char(line[start - 1]):
         return True
@@ -20,10 +21,10 @@ def check_match(number: re.Match, line: str, check_pos: bool) -> bool:
 
 
 def iter_parts(text: list[str], yield_values: bool = False) -> Generator:
-    exp = re.compile(r"\d+")
+    expr = re.compile(r"\d+")
     for i, line in enumerate(text):
         parts = []
-        for num in exp.finditer(line):
+        for num in expr.finditer(line):
             if check_match(num, line, False):
                 parts.append(num)
             elif i > 0 and check_match(num, text[i - 1], True):
