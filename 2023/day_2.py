@@ -18,16 +18,18 @@ def color_count(draw: list[str]) -> dict:
     return counter
 
 
+def check_draw(draw: list[str]) -> bool:
+    counter = color_count(draw)
+    for color, count in counter.items():
+        if count > CUBES_MAX[color]:
+            return False
+    return True
+
+
 def part_1(text: list[str]) -> Generator:
     for string in text:
         game_id, draws = parse_game(string)
-        maxed_out = False
-        for draw in draws:
-            counter = color_count(draw)
-            for color, count in counter.items():
-                if count > CUBES_MAX[color]:
-                    maxed_out = True
-        if not maxed_out:
+        if all(map(check_draw, draws)):
             yield game_id
 
 
