@@ -38,9 +38,8 @@ def part_2(text: list[str]) -> int:
     tot = 0
     for string in text:
         _, draws = parse_game(string)
-        counters = [color_count(d) for d in draws]
         used_cubes = {"red": 0, "green": 0, "blue": 0}
-        for counter in counters:
+        for counter in (color_count(d) for d in draws):
             for color, count in counter.items():
                 if count > used_cubes[color]:
                     used_cubes[color] = count
