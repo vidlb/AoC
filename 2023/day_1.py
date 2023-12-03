@@ -21,7 +21,7 @@ def part_2(text: list[str]) -> Generator:
 
 
 if __name__ == "__main__":
-    with open("data.txt", encoding="utf-8") as io:
+    with open("data_1.txt", encoding="utf-8") as io:
         data = io.read().splitlines()
     print(f"Part 1 answer is {sum(part_1(data))}")
     print(f"Part 2 answer is {sum(part_2(data))}")

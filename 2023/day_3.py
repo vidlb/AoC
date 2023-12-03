@@ -70,7 +70,7 @@ def part_2(text: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    with open("data.txt", encoding="utf-8") as io:
+    with open("data_3.txt", encoding="utf-8") as io:
         data = io.read().splitlines()
     print(f"Part 1 answer is {part_1(data)}")
     print(f"Part 2 answer is {part_2(data)}")
