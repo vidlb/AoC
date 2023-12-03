@@ -37,12 +37,12 @@ def part_2(text: list[str]) -> Generator:
     for string in text:
         _, draws = parse_game(string)
         counters = [color_count(d) for d in draws]
-        cubes = {"red": 0, "green": 0, "blue": 0}
+        used_cubes = {"red": 0, "green": 0, "blue": 0}
         for counter in counters:
             for color, count in counter.items():
-                if count > cubes[color]:
-                    cubes[color] = count
-        yield math.prod(cubes.values())
+                if count > used_cubes[color]:
+                    used_cubes[color] = count
+        yield math.prod(used_cubes.values())
 
 
 if __name__ == "__main__":
