@@ -5,10 +5,9 @@ from typing import Generator
 
 
 def check_match(number: re.Match, line: str, check_pos: bool) -> bool:
+    expr = re.compile(r"\d|\.")
     def check_char(char: str) -> bool:
-        if char.isdigit() or char == ".":
-            return False
-        return True
+        return expr.match(char)
 
     start, end = number.span()
     if check_pos and any(check_char(c) for c in line[start:end]):

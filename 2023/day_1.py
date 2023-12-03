@@ -7,17 +7,18 @@ DIGITS = {
 
 def part_1(text: list[str]) -> int:
     tot = 0
+    expr = re.compile(r"\d")
     for string in text:
-        numbers = list(filter(lambda s: s.isdigit(), string))
+        numbers = expr.findall(string)
         tot += int(numbers[0] + numbers[-1])
     return tot
 
 
 def part_2(text: list[str]) -> int:
     tot = 0
+    expr = re.compile("(?=(" + "|".join(list(DIGITS.keys()) + [r"\d"]) + "))")
     for string in text:
-        expr = "(?=(" + "|".join(list(DIGITS.keys()) + [r"\d"]) + "))"
-        numbers = re.findall(expr, string)
+        numbers = expr.findall(string)
         first, last = numbers[0], numbers[-1]
         tot += int(DIGITS.get(first, first) + DIGITS.get(last, last))
     return tot
