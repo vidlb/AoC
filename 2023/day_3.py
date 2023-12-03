@@ -12,12 +12,11 @@ def check_char(char: str) -> bool:
 def collect_matches(matches: list[re.Match], num: re.Match, line: str, check_pos: bool):
     start, end = num.span()
     if check_pos and any(check_char(c) for c in line[start:end]):
-        return matches.append(num)
-    if start > 0 and check_char(line[start - 1]):
-        return matches.append(num)
-    if end < len(line) - 1 and check_char(line[end]):
-        return matches.append(num)
-    return None
+        matches.append(num)
+    elif start > 0 and check_char(line[start - 1]):
+        matches.append(num)
+    elif end < len(line) - 1 and check_char(line[end]):
+        matches.append(num)
 
 
 def find_parts(text: list[str]) -> Generator:
