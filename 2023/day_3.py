@@ -2,13 +2,15 @@ import re
 import math
 from itertools import chain
 from typing import Generator
+from time import perf_counter
 
 
 def check_match(number: re.Match, line: str, span_check: bool) -> bool:
-    expr = re.compile(r"\d|\.")
 
     def check_char(char: str) -> bool:
-        return not expr.match(char)
+        if char == "." or char.isdigit():
+            return False
+        return True
 
     start, end = number.span()
     if span_check and any(check_char(c) for c in line[start:end]):
