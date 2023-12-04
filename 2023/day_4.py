@@ -22,15 +22,15 @@ def part_1(text: str):
 
 def recursive_score(line_num, win_numbers: list[set]):
     score = 1
-    line_end = line_num + 1 + len(win_numbers[line_num])
+    line_end = line_num + 1 + win_numbers[line_num]
     for i in range(line_num + 1, line_end):
         score += recursive_score(i, win_numbers)
     return score
 
 
 def part_2(text: str):
-    win_sets = [parse_line(l) for l in text]
-    return sum(recursive_score(i, win_sets) for i in range(len(win_sets)))
+    win_sets_len = [len(parse_line(t)) for t in text]
+    return sum(recursive_score(i, win_sets_len) for i in range(len(win_sets_len)))
 
 
 if __name__ == "__main__":
