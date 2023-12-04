@@ -5,16 +5,14 @@ def test_part_1():
     with open("test_data_4.txt", encoding="utf-8") as io:
         data = io.read().splitlines()
 
-    res = part_1(data)
-    assert res == 13
+    assert part_1(data) == 13
 
 
 def test_part_2():
     with open("test_data_4.txt", encoding="utf-8") as io:
         data = io.read().splitlines()
 
-    res = part_2(data)
-    assert res == 30
+    assert part_2(data) == 30
 
 
 if __name__ == "__main__":
