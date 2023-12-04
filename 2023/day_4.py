@@ -6,11 +6,11 @@ def count_wins(line: str) -> int:
     return len({*win.split()} & {*own.split()})
 
 
-def part_1(cards: list[str]):
+def part_1(cards: list[str]) -> int:
     return sum(2 ** count_wins(c) // 2 for c in cards)
 
 
-def part_2(cards: list[str]):
+def part_2(cards: list[str]) -> int:
     win_len = tuple(count_wins(c) for c in cards)
 
     @lru_cache(maxsize=20)
