@@ -14,9 +14,9 @@ def part_2(cards: list[str]):
     win_len = tuple(count_wins(c) for c in cards)
 
     @lru_cache(maxsize=20)
-    def recursive_score(line_num):
+    def recursive_score(line: int) -> int:
         score = 1
-        for i in range(line_num + 1, line_num + 1 + win_len[line_num]):
+        for i in range(line + 1, line + 1 + win_len[line]):
             score += recursive_score(i)
         return score
 
