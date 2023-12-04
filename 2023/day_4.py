@@ -13,7 +13,7 @@ def part_1(cards: list[str]):
 def part_2(cards: list[str]):
     win_len = tuple(count_wins(c) for c in cards)
 
-    @lru_cache
+    @lru_cache(maxsize=20)
     def recursive_score(line_num):
         score = 1
         for i in range(line_num + 1, line_num + 1 + win_len[line_num]):
