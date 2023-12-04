@@ -3,12 +3,12 @@ def parse_line(line: str) -> set:
     win, card = values.split(" | ")
     win = set(int(w.strip()) for w in win.split())
     card = set(int(c.strip()) for c in card.split())
-    return win & card
+    return tuple(win & card)
 
 
-def compute_score(winning_nums):
+def compute_score(win_numbers):
     n = 0
-    for i in range(len(winning_nums)):
+    for i in range(len(win_numbers)):
         if i == 0:
             n = 1
         else:
@@ -17,13 +17,14 @@ def compute_score(winning_nums):
 
 
 def part_1(text: str):
-    return sum(compute_score(parse_line(line)) for line in text)
+    return sum(compute_score(parse_line(t)) for t in text)
 
 
-def recursive_score(line_num, win_sets: list[set]):
+def recursive_score(line_num, win_numbers: list[set]):
     score = 1
-    for i in range(line_num + 1, line_num + 1 + len(win_sets[line_num])):
-        score += recursive_score(i, win_sets)
+    line_end = line_num + 1 + len(win_numbers[line_num])
+    for i in range(line_num + 1, line_end):
+        score += recursive_score(i, win_numbers)
     return score
 
 
