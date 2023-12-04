@@ -2,7 +2,6 @@ import re
 import math
 from itertools import chain
 from typing import Generator
-from time import perf_counter
 
 
 def check_match(number: re.Match, line: str, span_check: bool) -> bool:
