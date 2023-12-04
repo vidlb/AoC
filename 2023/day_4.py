@@ -1,36 +1,26 @@
-def parse_line(line: str) -> set:
-    values = line.split(": ")[1]
-    win, card = values.split(" | ")
-    win = set(int(w.strip()) for w in win.split())
-    card = set(int(c.strip()) for c in card.split())
-    return tuple(win & card)
+from functools import lru_cache
 
 
-def compute_score(win_numbers):
-    n = 0
-    for i in range(len(win_numbers)):
-        if i == 0:
-            n = 1
-        else:
-            n *= 2
-    return n
+def count_wins(line: str) -> int:
+    win, own = line.split(": ")[1].split(" | ")
+    return len({*win.split()} & {*own.split()})
 
 
-def part_1(text: str):
-    return sum(compute_score(parse_line(t)) for t in text)
+def part_1(cards: list[str]):
+    return sum(2 ** count_wins(c) // 2 for c in cards)
 
 
-def recursive_score(line_num, win_numbers: list[set]):
-    score = 1
-    line_end = line_num + 1 + win_numbers[line_num]
-    for i in range(line_num + 1, line_end):
-        score += recursive_score(i, win_numbers)
-    return score
+def part_2(cards: list[str]):
+    win_len = tuple(count_wins(c) for c in cards)
 
+    @lru_cache
+    def recursive_score(line_num):
+        score = 1
+        for i in range(line_num + 1, line_num + 1 + win_len[line_num]):
+            score += recursive_score(i)
+        return score
 
-def part_2(text: str):
-    win_sets_len = [len(parse_line(t)) for t in text]
-    return sum(recursive_score(i, win_sets_len) for i in range(len(win_sets_len)))
+    return sum(recursive_score(i) for i in range(len(win_len)))
 
 
 if __name__ == "__main__":
