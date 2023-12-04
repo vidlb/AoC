@@ -8,7 +8,7 @@ def check_match(number: re.Match, line: str, span_check: bool) -> bool:
     expr = re.compile(r"\d|\.")
 
     def check_char(char: str) -> bool:
-        return expr.match(char)
+        return not expr.match(char)
 
     start, end = number.span()
     if span_check and any(check_char(c) for c in line[start:end]):
