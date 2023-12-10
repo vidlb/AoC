@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from time import perf_counter
 
 def parse_map(block: str):
     _, *numbers = block.split("\n")
@@ -49,15 +49,23 @@ def get_seed(location: int, map_ranges: list) -> int:
 
 def part_2(text: str):
     sd, map_ranges = parse_data(text, sort_by_src=False)
+    seed_ranges = [(sd[i], sd[i] + sd[i + 1]) for i in range(0, len(sd), 2)]
+    seed_ranges = sorted(seed_ranges, key=lambda r: r[0])
+    min_seed, max_seed = seed_ranges[0][0], seed_ranges[-1][1]
     map_ranges = list(reversed(map_ranges.values()))
-    seed_ranges = [(sd[i], sd[i + 1]) for i in range(0, len(sd), 2)]
+    max_loc = max(loc[0] + loc[2] for loc in map_ranges[0])
 
     def check_seed_ranges(seed: int):
-        return any((start <= seed < start + rng) for (start, rng) in seed_ranges)
+        if not min_seed <= seed < max_seed:
+            return False
+        return any((start <= seed < end) for (start, end) in seed_ranges)
 
-    max_loc = max(loc[0] + loc[2] for loc in map_ranges[0])
-    for loc in range(0, max_loc):
-        if check_seed_ranges(get_seed(loc, map_ranges)):
+    search = range(0, max_loc)
+    print(f"Starting process with {search=}")
+    for loc in search:
+        seed = get_seed(loc, map_ranges)
+        if check_seed_ranges(seed):
+            print(f"Found {seed=}")
             return loc
 
 
@@ -65,4 +73,7 @@ if __name__ == "__main__":
     with open("data_5.txt", encoding="utf-8") as io:
         data = io.read()
     print(f"Part 1 answer is {part_1(data)}")
+    st = perf_counter()
     print(f"Part 2 answer is {part_2(data)}")
+    sp = perf_counter()
+    print(f"Elpased time: {sp - st}s")
