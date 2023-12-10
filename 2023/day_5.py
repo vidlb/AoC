@@ -1,7 +1,8 @@
 from collections import OrderedDict
 from time import perf_counter
 
-def parse_map(block: str):
+
+def parse_map(block: str) -> tuple[tuple[int]]:
     _, *numbers = block.split("\n")
     return tuple(tuple(map(int, n.split())) for n in numbers if n)
 
@@ -29,7 +30,7 @@ def get_location(seed: int, map_ranges: list) -> int:
     return key
 
 
-def part_1(text: str):
+def part_1(text: str) -> int:
     seeds, map_ranges = parse_data(text)
     map_ranges = list(map_ranges.values())
     return min(get_location(s, map_ranges) for s in seeds)
@@ -47,7 +48,7 @@ def get_seed(location: int, map_ranges: list) -> int:
     return key
 
 
-def part_2(text: str):
+def part_2(text: str) -> int:
     sd, map_ranges = parse_data(text, sort_by_src=False)
     seed_ranges = [(sd[i], sd[i] + sd[i + 1]) for i in range(0, len(sd), 2)]
     seed_ranges = sorted(seed_ranges, key=lambda r: r[0])
