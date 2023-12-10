@@ -7,16 +7,16 @@ def parse_races(text: str):
     return tuple(int(t) for t in time), tuple(int(d) for d in dist)
 
 
-def button_times(total_time, dist):
+def button_times(total_time, dist) -> tuple(int):
     times = []
     for i in range(total_time):
         run_time = total_time - i
         if i * run_time > dist:
             times.append(i)
-    return times
+    return tuple(times)
 
 
-def part_1(text: str):
+def part_1(text: str) -> int:
     time, dist = parse_races(text)
     runs = []
     for t, d in zip(time, dist):
@@ -24,13 +24,13 @@ def part_1(text: str):
     return prod(runs)
 
 
-def parse_single_race(text: str):
+def parse_single_race(text: str) -> tuple(int):
     time, dist, _ = text.split("\n")
     time, dist = time.split(":")[1].replace(" ", ""), dist.split(":")[1].replace(" ", "")
     return int(time), int(dist)
 
 
-def part_2(text: str):
+def part_2(text: str) -> int:
     return len(button_times(*parse_single_race(text)))
 
 
