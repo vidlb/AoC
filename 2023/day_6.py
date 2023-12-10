@@ -1,7 +1,7 @@
 from math import prod
 
 
-def parse_races(text: str):
+def parse_races(text: str) -> tuple[tuple[int]]:
     time, dist, _ = text.split("\n")
     time, dist = time.split(":")[1].split(), dist.split(":")[1].split()
     return tuple(int(t) for t in time), tuple(int(d) for d in dist)
