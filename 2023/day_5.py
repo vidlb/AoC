@@ -1,6 +1,4 @@
 from collections import OrderedDict
-from time import perf_counter
-
 
 def parse_map(block: str) -> tuple[tuple[int]]:
     _, *numbers = block.split("\n")
@@ -74,7 +72,4 @@ if __name__ == "__main__":
     with open("data_5.txt", encoding="utf-8") as io:
         data = io.read()
     print(f"Part 1 answer is {part_1(data)}")
-    st = perf_counter()
     print(f"Part 2 answer is {part_2(data)}")
-    sp = perf_counter()
-    print(f"Elpased time: {sp - st}s")
