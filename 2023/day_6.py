@@ -1,8 +1,8 @@
 from math import prod
 
 
-def n_times(time, dist) -> tuple[int]:
-    return tuple(i for i in range(time) if i * (time - i) > dist)
+def n_times(time, record) -> tuple[int]:
+    return tuple(i for i in range(time) if i * (time - i) > record)
 
 
 def part_1(text: str) -> int:
