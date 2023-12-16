@@ -2,10 +2,10 @@ from itertools import cycle
 from math import lcm
 
 
-def parse_data(text: str) -> tuple[str, dict[str, tuple]]:
-    nodes_map = {}
+def parse_data(text: str) -> tuple[str, dict]:
     instr, *lines = text.splitlines()
     instr = tuple(0 if i == "L" else 1 for i in instr)
+    nodes_map = {}
     for n in lines[1:]:
         node, targets = n[:-1].split(" = (")
         nodes_map[node] = tuple(targets.split(", "))
