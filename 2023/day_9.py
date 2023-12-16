@@ -27,8 +27,7 @@ def extrapolate_backward(report: list[int]) -> list[list[int]]:
     new_data = 0
     for d in reversed(diffs):
         new_data = d[0] - new_data
-    res = report[0] - new_data
-    return res
+    return report[0] - new_data
 
 
 def part_2(text: str) -> int:
